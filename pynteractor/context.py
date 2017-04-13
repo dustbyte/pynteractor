@@ -15,14 +15,15 @@ class Context:
 
     def __init__(self, **kwargs):
         super(Context, self).__setattr__('_inner', kwargs)
+        self.interrupted = False
         self.set_success(True)
 
     def set_success(self, value):
         """
         Set the outcoming results
         """
-        self._inner['success'] = value
-        self._inner['failure'] = not value
+        self.success = value
+        self.failure = not value
 
     def __getattr__(self, attr):
         return self._inner.get(attr, None)
@@ -50,6 +51,7 @@ class Context:
         for arg, value in kwargs.items():
             self._inner[arg] = value
 
+        self.interrupted = True
         self.set_success(success)
 
     def fail(self, **kwargs):

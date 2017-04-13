@@ -4,4 +4,5 @@
 Library to implement Business Logic.
 """
 
-from pynteractor.context import Context
+from pynteractor.interactor import Interactor
+from pynteractor.organizer import Organizer
