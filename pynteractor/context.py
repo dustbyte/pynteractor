@@ -8,13 +8,15 @@ organizer, but also within the organizer itself.
 from pynteractor.errors import LogicError, StopExecution
 
 
-class Context:
+class Context(object):
     """
     Organizer data bank and termination decider.
     """
 
     def __init__(self, **kwargs):
-        super(Context, self).__setattr__('_inner', kwargs)
+        for key, value in kwargs.items():
+            self[key] = value
+
         self.interrupted = False
         self.set_success(True)
 
@@ -26,10 +28,7 @@ class Context:
         self.failure = not value
 
     def __getattr__(self, attr):
-        return self._inner.get(attr, None)
-
-    def __setattr__(self, attr, value):
-        self._inner[attr] = value
+        return self.__dict__.get(attr, None)
 
     def __getitem__(self, attr):
         return getattr(self, attr)
@@ -41,7 +40,7 @@ class Context:
         """
         Expose the whole set of context-related attributes
         """
-        return self._inner
+        return self.__dict__
 
     def terminate(self, success=True, **kwargs):
         """
@@ -49,7 +48,7 @@ class Context:
         current context with passed arguments.
         """
         for arg, value in kwargs.items():
-            self._inner[arg] = value
+            self[arg] = value
 
         self.interrupted = True
         self.set_success(success)

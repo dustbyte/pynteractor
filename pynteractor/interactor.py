@@ -15,7 +15,7 @@ from pynteractor.errors import LogicError, StopExecution
 from pynteractor.context import Context
 
 
-class Interactor:
+class Interactor(object):
     """
     Smallest brick of Business Logic
     """
