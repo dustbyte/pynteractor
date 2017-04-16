@@ -43,16 +43,13 @@ class Interactor(object):
         Mostly used internally to chain interactor calls.
         """
         instance = klass(context)
-        instance.before()
 
         try:
-            instance.around()
+            instance.run()
         except StopExecution:
             pass
         except LogicError:
             klass.call_rollback(context)
-        else:
-            instance.after()
 
         return context
 
@@ -70,24 +67,6 @@ class Interactor(object):
             context = Context
 
         self.context = context
-
-    def before(self):
-        """
-        Hook to be called before run is called
-        """
-
-    def after(self):
-        """
-        Hook to be called after run is called
-        """
-
-    def around(self):
-        """
-        Hook to be called around run and must yield once and only once.
-
-        Code is execute after the `before` method and before the `after` method
-        """
-        self.run()
 
     def run(self):
         """

@@ -32,48 +32,6 @@ def test_call_without_context():
     assert ctx.age == 42
     assert ctx.name == 'John Doe'
 
-def test_before_hook():
-    class Impl(Interactor):
-        def before(self):
-            self.context.age = 41
-
-        def run(self):
-            self.context.age = self.context.age + 1
-
-    ctx = Impl.call()
-
-    assert ctx.success == True
-    assert ctx.age == 42
-
-def test_after_hook():
-    class Impl(Interactor):
-        def run(self):
-            self.context.age = 41
-
-        def after(self):
-            self.context.age = self.context.age + 1
-
-
-    ctx = Impl.call()
-
-    assert ctx.success == True
-    assert ctx.age == 42
-
-def test_around_hook():
-    class Impl(Interactor):
-        def around(self):
-            self.context.age = 40
-            self.run()
-            self.context.age = self.context.age + 1
-
-        def run(self):
-            self.context.age = self.context.age + 1
-
-    ctx = Impl.call()
-
-    assert ctx.success == True
-    assert ctx.age == 42
-
 def test_rollback_not_called():
     class Impl(Interactor):
         def run(self):
