@@ -6,7 +6,7 @@ setup(
     author="Pierre Wacrenier",
     author_email="pierre@wacrenier.me",
     description="Lib to ease business logic separation",
-    url="http://github.com/mota/pynteractor",
+    url="https://github.com/mota/pynteractor",
     license="ISC",
     setup_requires=["pytest-runner"],
     tests_require=["pytest", "pytest-describe"],
