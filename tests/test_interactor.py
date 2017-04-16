@@ -73,3 +73,29 @@ def test_around_hook():
 
     assert ctx.success == True
     assert ctx.age == 42
+
+def test_rollback_not_called():
+    class Impl(Interactor):
+        def run(self):
+            self.context.rollbacked = False
+
+        def rollback(self):
+            self.context.rollbacked = True
+
+    ctx = Impl.call()
+
+    assert ctx.success == True
+    assert ctx.rollbacked == False
+
+def test_rollback_called():
+    class Impl(Interactor):
+        def run(self):
+            self.context.fail(message="I want to rollback")
+
+        def rollback(self):
+            self.context.rollbacked = True
+
+    ctx = Impl.call()
+
+    assert ctx.success == False
+    assert ctx.rollbacked == True

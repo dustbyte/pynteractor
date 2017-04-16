@@ -47,10 +47,22 @@ class Interactor(object):
 
         try:
             instance.around()
-        except (LogicError, StopExecution):
+        except StopExecution:
             pass
+        except LogicError:
+            klass.call_rollback(context)
+        else:
+            instance.after()
 
-        instance.after()
+        return context
+
+    @classmethod
+    def call_rollback(klass, context):
+        instance = klass(context)
+        try:
+            instance.rollback()
+        except AttributeError:
+            pass
         return instance.context
 
     def __init__(self, context=None):

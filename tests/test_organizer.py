@@ -76,3 +76,77 @@ def test_failed():
     assert ctx.success == False
     assert ctx.name == 'John Doe'
     assert ctx.message == 'Condition not met'
+
+def test_rollback():
+    class Int1(Interactor):
+        def run(self):
+            pass
+
+        def rollback(self):
+            self.context.rollbacked.append('Int1')
+
+
+    class Int2(Interactor):
+        def run(self):
+            self.context.fail(message='Condition not met')
+
+        def rollback(self):
+            self.context.rollbacked.append('Int2')
+
+
+    class Org1(Organizer):
+        interactors = [Int1, Int2]
+
+
+    ctx = Org1.call(rollbacked=[])
+
+    assert ctx.success == False
+    assert ctx.rollbacked == ['Int2', 'Int1']
+
+def test_premature_rollback():
+    class Int1(Interactor):
+        def run(self):
+            self.context.fail(message='Condition not met')
+
+        def rollback(self):
+            self.context.rollbacked.append('Int1')
+
+
+    class Int2(Interactor):
+        def run(self):
+            pass
+
+        def rollback(self):
+            self.context.rollbacked.append('Int2')
+
+
+    class Org1(Organizer):
+        interactors = [Int1, Int2]
+
+
+    ctx = Org1.call(rollbacked=[])
+
+    assert ctx.success == False
+    assert ctx.rollbacked == ['Int1']
+
+def test_premature_no_rollback():
+    class Int1(Interactor):
+        def run(self):
+            self.context.fail(message='Condition not met')
+
+    class Int2(Interactor):
+        def run(self):
+            pass
+
+        def rollback(self):
+            self.context.rollbacked.append('Int2')
+
+
+    class Org1(Organizer):
+        interactors = [Int1, Int2]
+
+
+    ctx = Org1.call(rollbacked=[])
+
+    assert ctx.success == False
+    assert ctx.rollbacked == []

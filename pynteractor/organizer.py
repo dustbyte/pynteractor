@@ -57,7 +57,13 @@ class Organizer(with_metaclass(OrganizerMeta, Interactor)):
     """
 
     def run(self):
+        called = []
         for interactor in self.interactors:
             self.context = interactor.call_with_context(self.context)
             if self.context.interrupted:
                 break
+            called.append(interactor)
+
+        if not self.context.success:
+            for interactor in reversed(called):
+                interactor.call_rollback(self.context)
