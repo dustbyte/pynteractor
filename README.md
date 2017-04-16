@@ -140,3 +140,24 @@ def register_user(request):
         return  HttpResponseBadRequest()
 
 ```
+
+### Rollback
+
+When something goes wrong,we sometimes want to do some cleanups and reverse operations.
+
+Within an interactor, it is possible to do so if the current `run` method has failed, by implementing the `rollback` method. As expected, the `rollback` method will only be called if implemented and and a `Context.fail` has been called.
+
+Within an **Organizer**, the `rollback` methods are called in reverse order of the `interactors` list. That is, if supposedly we have 
+
+```
+interactors = [Interactor1, Interactor2]
+```
+
+then `rollback` methods will be called in this order if `Interactor2` fails:
+
+```
+Interactor2.rollback()
+Interactor1.rollback()
+```
+
+However, if `Interactor1` fails, only its rollback method (if implemented) will be called.
