@@ -23,7 +23,7 @@ class OrganizerMeta(type):
     Metaclass around organizers, ensures that the static attribute
     `interactors` of a class inheritting from Organizer is present.
     """
-    
+
     def __init__(cls, name, bases, attrs):
         if name != 'Organizer' and 'interactors' not in attrs:
                 raise TypeError('Organizer requires a list of interactors.')

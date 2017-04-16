@@ -64,7 +64,8 @@ class Context(object):
     def stop(self, **kwargs):
         """
         Stop running the current organizer but raise an error to signal the
-        user just wants to terminate the current organizer/interactor execution.
+        user just wants to terminate the current organizer/interactor
+        execution.
         """
         self.terminate(success=True, **kwargs)
         raise StopExecution()
