@@ -67,6 +67,7 @@ class Interactor(object):
             context = Context
 
         self.context = context
+        self.ctx = context
 
     def run(self):
         """

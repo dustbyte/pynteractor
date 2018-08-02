@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pynteractor",
-    version="0.1",
+    version="0.2",
     author="Pierre Wacrenier",
     author_email="pierre@wacrenier.me",
     description="Lib to ease business logic separation",

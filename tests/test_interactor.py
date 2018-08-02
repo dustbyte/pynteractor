@@ -57,3 +57,15 @@ def test_rollback_called():
 
     assert ctx.success == False
     assert ctx.rollbacked == True
+
+
+def test_ctx_alias():
+    class Impl(Interactor):
+        def run(self):
+            self.ctx.my_val = 42
+            self.ctx.my_other_val = 21
+
+    ctx = Impl.call()
+
+    assert ctx.my_val == 42
+    assert ctx.my_other_val == 21
